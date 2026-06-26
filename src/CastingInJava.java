@@ -1,9 +1,3 @@
-package casting;
-
-import java.awt.font.NumericShaper;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-
 public class CastingInJava {
     public static void main(String[] args) {
 //        Scanner leitor = new Scanner(System.in);
@@ -29,5 +23,9 @@ public class CastingInJava {
         int meuIntForFloat = (int) meuInt;
 
         System.out.println(meuIntForFloat);
+
+        char meuChar = 'a';
+        int meuIntForChar = (int) meuChar;
+        System.out.println(meuIntForChar + " Numero do cahr na tabala ascii");
     }
 }

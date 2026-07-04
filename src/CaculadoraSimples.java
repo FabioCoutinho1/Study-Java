@@ -6,9 +6,9 @@ public class CaculadoraSimples {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        System.out.println("Caculadora Simples");
 
         while (true){
-            System.out.println("Caculadora Simples");
             System.out.println("operação que deseja fazer: \n+ \n* \n- \n/ \nS -> sair\nH -> Histórico");
             String op = sc.next();
 

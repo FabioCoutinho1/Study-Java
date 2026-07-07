@@ -1,3 +1,4 @@
+import javax.crypto.spec.PSource;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -13,29 +14,45 @@ public class SystemPassword {
             System.out.println("""
                     1 - Gerar senha
                     2 - Finalizar atendimento atual
-                    3 - Proximo atendimento
+                    3 - Chamar atendimento atual
                     4 - Ver atendimento atual
-                    5 - Sair
+                    5 - Ver fila completa
+                    6 - Sair
                     """);
             int opcao = sc.nextInt();
             switch (opcao){
                 case 1 -> {
-                    String senha = gerarSenha();
+                    String senha = makePassword();
                     addPassword(senha);
                     System.out.println("Senha gerada com sucesso: " + senha);
                 }
                 case 2 -> {
-                    finalizarSenha();
+                    if (checkQueueIsEmpty()){
+                        break ;
+                    }
+                    System.out.println("Finalizando o atendimento: ");
+                    printPasswords();
+                    finishPassword();
+
                 }
                 case 3 -> {
+                    if (checkQueueIsEmpty()){
+                        break ;
+                    }
                     System.out.println("Para chamar o próximo, finalize o atendimento atual Primeiro (Opção 2)!");
                     printPasswords();
                 }
                 case 4 -> {
+                    if (checkQueueIsEmpty()){
+                        break ;
+                    }
                     System.out.println("Atendimento atual:");
                     printPasswords();
                 }
                 case 5 -> {
+                    printQueue();
+                }
+                case 6 -> {
                     break atendimentos;
                 }
                 default -> {
@@ -49,20 +66,40 @@ public class SystemPassword {
         passwords.add(password);
    }
 
+   public static boolean checkQueueIsEmpty (){
+        if (passwords.isEmpty()){
+            System.out.println("Nenhuma senha na fila");
+            return true;
+        }
+        return false;
+   }
+
    public static void printPasswords() {
-       System.out.println(passwords.peek());
+
+        System.out.println(passwords.peek());
    }
 
-   public static void finalizarSenha() {
-        passwords.poll();
+   public static void printQueue (){
+        if (checkQueueIsEmpty()){
+            return;
+        }
+        int position = 0;
+       for(String password: passwords){
+           System.out.println(position + " -- " + password);
+           position++;
+       }
+       System.out.println("====================");
    }
 
-   public static String gerarSenha() {
+   public static void finishPassword() {
+       passwords.poll();
+   }
+
+   public static String makePassword() {
         String characterPermitted = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int maxLength = 10;
         return  new Random().ints(maxLength, 0, characterPermitted.length())
                .mapToObj(characterPermitted::charAt)
-               //mesmo que indice -> characterPermitted.charAt(indice)
                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                .toString();
    }

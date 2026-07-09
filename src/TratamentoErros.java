@@ -4,10 +4,13 @@ public class TratamentoErros {
     public static void main(String[] args) {
 
         try {
-            System.out.println(dividir(10, 0));
+            System.out.println(dividir(10, 2));
         }
         catch (ArithmeticException e){
             System.out.println(e.getMessage());
+        }
+        finally {
+            System.out.println("final!");
         }
     }
 

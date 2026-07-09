@@ -1,8 +1,5 @@
 import javax.crypto.spec.PSource;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class SystemPassword {
     private static final Queue<String> passwords = new LinkedList<>();
@@ -19,46 +16,53 @@ public class SystemPassword {
                     5 - Ver fila completa
                     6 - Sair
                     """);
-            int opcao = sc.nextInt();
-            switch (opcao){
-                case 1 -> {
-                    String senha = makePassword();
-                    addPassword(senha);
-                    System.out.println("Senha gerada com sucesso: " + senha);
-                }
-                case 2 -> {
-                    if (checkQueueIsEmpty()){
-                        break ;
-                    }
-                    System.out.println("Finalizando o atendimento: ");
-                    printPasswords();
-                    finishPassword();
 
-                }
-                case 3 -> {
-                    if (checkQueueIsEmpty()){
-                        break ;
+            try {
+                int opcao = sc.nextInt();
+                switch (opcao){
+                    case 1 -> {
+                        String senha = makePassword();
+                        addPassword(senha);
+                        System.out.println("Senha gerada com sucesso: " + senha);
                     }
-                    System.out.println("Para chamar o próximo, finalize o atendimento atual Primeiro (Opção 2)!");
-                    printPasswords();
-                }
-                case 4 -> {
-                    if (checkQueueIsEmpty()){
-                        break ;
+                    case 2 -> {
+                        if (checkQueueIsEmpty()){
+                            break ;
+                        }
+                        System.out.println("Finalizando o atendimento: ");
+                        printPasswords();
+                        finishPassword();
+
                     }
-                    System.out.println("Atendimento atual:");
-                    printPasswords();
+                    case 3 -> {
+                        if (checkQueueIsEmpty()){
+                            break ;
+                        }
+                        System.out.println("Para chamar o próximo, finalize o atendimento atual Primeiro (Opção 2)!");
+                        printPasswords();
+                    }
+                    case 4 -> {
+                        if (checkQueueIsEmpty()){
+                            break ;
+                        }
+                        System.out.println("Atendimento atual:");
+                        printPasswords();
+                    }
+                    case 5 -> {
+                        printQueue();
+                    }
+                    case 6 -> {
+                        break atendimentos;
+                    }
+                    default -> {
+                        System.out.println("Opção inválida!");
+                    }
                 }
-                case 5 -> {
-                    printQueue();
-                }
-                case 6 -> {
-                    break atendimentos;
-                }
-                default -> {
-                    System.out.println("Opção inválida!");
-                }
+            }catch (InputMismatchException e){
+                System.out.println("Opção invalida");
+                sc.next();
             }
+
         }
     }
 

@@ -24,6 +24,7 @@ public class RegisterOfOfficial {
             try {
                 int opcao = sc.nextInt();
 
+                switchOfficials:
                 switch (opcao) {
                     case 1 -> {
                         try {
@@ -34,22 +35,78 @@ public class RegisterOfOfficial {
                             sc.nextLine();
                         }
                     }
+                    case 2 ->{
+                        if(l.listOfficialsIsEmpty()){
+                            System.out.println("Nenhum funcionário registrado");
+                            break;
+                        }
+                        System.out.println("Escolha um da lista para apagar:");
+                        l.printListOfOfficials(l);
+                        int index = sc.nextInt();
+                        try{
+                        l.removeOfficial(l.getOfficial(index));
+                        }catch (IndexOutOfBoundsException e){
+                            System.out.println("Funcionário não encontrado!");
+                            sc.nextLine();
+                        }
+                    }
+                    case 3 -> {
+                        if(l.listOfficialsIsEmpty()){
+                            System.out.println("Nenhum funcionário registrado");
+                            break;
+                        }
+                        System.out.println("Escolha um da lista para editar:");
+                        l.printListOfOfficials(l);
+                        int index = sc.nextInt();
+                        sc.nextLine();
+                        try{
+                            Officials newOfficials = registerOfOfficials(sc);
+                            l.editOfficial(l.getOfficial(index), newOfficials);
+                        }catch (IndexOutOfBoundsException e){
+                            System.out.println("Funcionário não encontrado!");
+                            sc.nextLine();
+                            break switchOfficials;
+                        }
+                    }
+                    case 4 -> {
+                        if(l.listOfficialsIsEmpty()){
+                            System.out.println("Nenhum funcionário registrado");
+                            break;
+                        }
+                        System.out.println("Escolha um da lista para apagar:");
+                        l.printListOfOfficials(l);
+                        int index = sc.nextInt();
+                        try{
+                            if (l.getOfficial(index) == null) {
+                                break switchOfficials;
+                            }
+                            System.out.println("Deseja apagar esse funcionário?");
+                            l.printFormatOfficials(l.getOfficial(index));
+                            System.out.println("[y/n] - y para sim, n para não");
+                            String confirm = sc.next();
+                            if (confirm.equalsIgnoreCase("y")) {
+                                System.out.println("Funcionário");
+                                l.printFormatOfficials(l.getOfficial(index));
+                                System.out.println(" removido com sucesso!");
+                                l.removeOfficial(l.getOfficial(index));
+
+                            } else if (confirm.equalsIgnoreCase("n")) {
+                                System.out.println("cancelando...");
+                                break switchOfficials;
+                            }else {
+                                System.out.println("Opção invalida!");
+                                sc.nextLine();
+                            }
+                        }catch (IndexOutOfBoundsException e){
+                            System.out.println("Funcionário não encontrado!");
+                            sc.nextLine();
+                        }
+                    }
                     case 6 -> {
-                        AtomicInteger count = new AtomicInteger();
-                        l.getListOfOfficials().forEach(e -> {
-                            System.out.printf("""
-                                (%s)-|___________
-                                    | nome: %s
-                                    | idade: %d
-                                    | salario: %f
-                                    | cargo: %s
-                                    |____________
-                                """, count, e.name(), e.age(), e.salary(), e.position()
-                            );
-                            count.getAndIncrement();
-                        });
+                        l.printListOfOfficials(l);
                     }
                     case 7 -> {
+                        System.out.println("Saindo...");
                         break registerOfOfficials;
                     }
                 }
@@ -57,12 +114,7 @@ public class RegisterOfOfficial {
                 System.out.println("Opção invalida");
                 sc.nextLine();
             }
-
-
-
         }
-
-
     }
     private static Officials registerOfOfficials(Scanner scRegister) throws InputMismatchException {
 
@@ -101,12 +153,16 @@ class ListOfOfficials{
         listOfOfficials.add(o);
     }
 
+    public boolean listOfficialsIsEmpty(){
+        return listOfOfficials.isEmpty();
+    }
+
     public void removeOfficial(Officials o){
         listOfOfficials.remove(o);
     }
 
-    public void editOfficial(Officials o){
-        listOfOfficials.set(listOfOfficials.indexOf(o), o);
+    public void editOfficial(Officials o, Officials newOfficial){
+        listOfOfficials.set(listOfOfficials.indexOf(o), newOfficial);
     }
 
     public Officials getOfficial(int i){
@@ -114,6 +170,37 @@ class ListOfOfficials{
     }
 
     public List<Officials> getListOfOfficials(){
+        if(listOfficialsIsEmpty()){
+            System.out.println("Lista vazia!");
+        }
         return listOfOfficials;
+    }
+
+    public void printFormatOfficials(Officials list){
+        System.out.printf("""
+                                    |___________
+                                    | nome: %s
+                                    | idade: %d
+                                    | salario: %f
+                                    | cargo: %s
+                                    |____________
+                                """, list.name(), list.age(), list.salary(), list.position()
+        );
+    }
+
+    public void printListOfOfficials(ListOfOfficials list){
+        AtomicInteger count = new AtomicInteger();
+        list.getListOfOfficials().forEach(e -> {
+            System.out.printf("""
+                                (%s)-|___________
+                                    | nome: %s
+                                    | idade: %d
+                                    | salario: %f
+                                    | cargo: %s
+                                    |____________
+                                """, count, e.name(), e.age(), e.salary(), e.position()
+            );
+            count.getAndIncrement();
+        });
     }
 }

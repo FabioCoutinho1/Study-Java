@@ -17,9 +17,8 @@ public class RegisterOfOfficial {
                     2 - Apagar funcionário
                     3 - Editar funcionário
                     4 - Excluir funcionário
-                    5 - Ver funcionário
-                    6 - Ver todos funcionários
-                    7 - Encerrar program
+                    5 - Ver todos funcionários
+                    6 - Encerrar program
                     """);
             try {
                 int opcao = sc.nextInt();
@@ -59,14 +58,16 @@ public class RegisterOfOfficial {
                         l.printListOfOfficials(l);
                         int index = sc.nextInt();
                         sc.nextLine();
+
                         try{
+                            Officials whereEdit = l.getOfficial(index);
                             Officials newOfficials = registerOfOfficials(sc);
-                            l.editOfficial(l.getOfficial(index), newOfficials);
+                            l.editOfficial(whereEdit, newOfficials);
                         }catch (IndexOutOfBoundsException e){
                             System.out.println("Funcionário não encontrado!");
-                            sc.nextLine();
                             break switchOfficials;
                         }
+
                     }
                     case 4 -> {
                         if(l.listOfficialsIsEmpty()){
@@ -102,10 +103,10 @@ public class RegisterOfOfficial {
                             sc.nextLine();
                         }
                     }
-                    case 6 -> {
+                    case 5 -> {
                         l.printListOfOfficials(l);
                     }
-                    case 7 -> {
+                    case 6 -> {
                         System.out.println("Saindo...");
                         break registerOfOfficials;
                     }
